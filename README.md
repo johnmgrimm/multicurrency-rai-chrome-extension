@@ -8,6 +8,8 @@ Supported currencies: EUR, CNY, JPY, GBP, KRW, INR and DAI, USDC, sUSD, USDT, PA
 
 User is able to turn on/off each currency as well as manually refresh the exchange rates data.
 
+Before it reaches official Google Store you can use it by downloading ZIP from https://github.com/johnmgrimm/multicurrency-rai-chrome-extension/releases/download/v1.0.0/unpacked.zip and then using `chrome://extensions/`, `Developer mode` and `Load unpacked` button point to the directory where you unpack extension files.
+
 ## Code coverage
 
 All supported currency cases are described with automated tests.
