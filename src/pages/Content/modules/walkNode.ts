@@ -20,12 +20,12 @@ export const walkNode = (
   node?: Node
 ) => {
   // nodeValue has to be present to analyze the node further
-  if (!node || !node.nodeValue) return;
+  if (!node || !node.nodeValue) return 'no currency';
   // TODO: find a way to get PREV and NEXT siblings
 
   if (!hasCurrencySymbol(node, currencySymbol)) {
     // node has no symbol then move to the next node
-    return;
+    return 'no currency';
   }
 
   // Value and symbol within one node
@@ -69,7 +69,7 @@ export const walkNode = (
         node.nodeValue
       );
     }
-    return;
+    return 'converted';
   }
 
   if (hasValueSymbolPrice(currencySymbol, node)) {
@@ -110,7 +110,7 @@ export const walkNode = (
         node.nodeValue
       );
     }
-    return;
+    return 'converted';
   }
 
   // Value in a different node than symbol
@@ -169,5 +169,5 @@ export const walkNode = (
   }
 
   // TODO: possibly simplify by walking through nodes gathering them in a sliding window
-  return;
+  return 'converted';
 };

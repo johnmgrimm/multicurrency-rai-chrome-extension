@@ -39,7 +39,10 @@ export const searchCurrency = async (rootNode?: Node) => {
       continue;
     }
     for (const currencyId of currencies) {
-      walkNode(conversionRates[currencyId], currencyId, node);
+      const result = walkNode(conversionRates[currencyId], currencyId, node);
+      if (result === 'converted') {
+        break;
+      }
     }
   }
 

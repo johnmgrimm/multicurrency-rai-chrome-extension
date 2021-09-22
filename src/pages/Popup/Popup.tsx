@@ -19,6 +19,7 @@ import {
   StoredData,
 } from '../../shared/consts';
 import { getDateStringFromNumber } from '../../shared/getDateStringFromNumber';
+import { ConversionRate } from './ConversionRate';
 
 const OptionsButton = styled(Button)(({ theme }) => ({
   background: `linear-gradient(225deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
@@ -29,25 +30,12 @@ const Popup = () => {
   const storedData = useAsyncRetry<StoredData>(async () => {
     return await getStoredData();
   }, []);
-  // console.log(storedData);
-
-  // const [refreshState, refresh] = useAsyncFn(async () => {
-  //   const result = await getUpdatedConversionRates();
-
-  //   // fake timeout that let show user that refresh is taking place
-  //   await new Promise((resolve) => setTimeout(resolve, 300));
-
-  //   console.log(result);
-  //   // await storedData.retry();
-
-  //   return result;
-  // }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <Container>
         <Typography variant="h6" component="h1">
-          Current price of 1 RAI
+          Current RAI prices
         </Typography>
         <FormHelperText>For enabled currencies</FormHelperText>
         <br />
@@ -56,18 +44,14 @@ const Popup = () => {
             storedData.value &&
             storedData.value.enabled.map((currencyId) => (
               <Grid item xs={12} key={currencyId}>
-                <FormLabel
-                  sx={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    lineHeight: 1.5,
-                  }}
-                >
-                  <span>
-                    {storedData?.value?.conversionRates[currencyId].toFixed(2)}{' '}
-                    {allCurrencies[currencyId].symbol}
-                  </span>
-                </FormLabel>
+                <ConversionRate
+                  currencyId={currencyId}
+                  currencySymbol={allCurrencies[currencyId].symbol}
+                  conversionRate={storedData?.value?.conversionRates[
+                    currencyId
+                  ].toFixed(2)}
+                  showLink
+                />
               </Grid>
             ))}
         </Grid>
@@ -82,6 +66,7 @@ const Popup = () => {
         </FormHelperText>
         <br />
         <OptionsButton
+          fullWidth
           color="primary"
           aria-label="Extension options"
           title="Extension options"
@@ -94,25 +79,6 @@ const Popup = () => {
         >
           Extension options
         </OptionsButton>
-        {/* <br />
-        {refreshState.error && (
-          <Alert severity="error" sx={{ marginBottom: 2 }}>
-            <AlertTitle>Error</AlertTitle>
-            <p>Error while refreshing conversion rates. Try again.</p>
-            <code>{JSON.stringify(refreshState.error)}</code>
-          </Alert>
-        )}
-        <br />
-        <LoadingButton
-          loading={refreshState.loading}
-          color="info"
-          variant="contained"
-          startIcon={<RefreshIcon />}
-          loadingPosition="start"
-          onClick={() => refresh()}
-        >
-          Refresh rates
-        </LoadingButton> */}
       </Container>
     </ThemeProvider>
   );

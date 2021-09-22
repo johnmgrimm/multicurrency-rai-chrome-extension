@@ -200,20 +200,20 @@ describe('getAmountRegex', () => {
 test('convertSymbolValuePrices', () => {
   expect(
     convertSymbolValuePrices(
-      3,
+      0.5,
       'usd',
       'some USD -1 value $1.50 and US$1 or US $1'
     )
-  ).toBe('some RAI -3 value RAI4.50 and RAI3 or RAI3');
-  expect(convertSymbolValuePrices(3, 'usd', '$1.50')).toBe('RAI4.50');
+  ).toBe('some RAI -2 value RAI3.00 and RAI2 or RAI2');
+  expect(convertSymbolValuePrices(0.5, 'usd', '$1.50')).toBe('RAI3.00');
 });
 
 test('convertValueSymbolPrices', () => {
   expect(
     convertValueSymbolPrices(
-      3,
+      0.5,
       'usd',
       'some 1USD value 1.50$ and 1US$ or 1US $'
     )
-  ).toBe('some 3RAI value 4.50RAI and 3RAI or 3RAI');
+  ).toBe('some 2RAI value 3.00RAI and 2RAI or 2RAI');
 });

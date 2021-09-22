@@ -147,7 +147,7 @@ var options = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: 'src/assets/img/RAI-logo-coin.png',
+          from: 'src/assets/img/*.png',
           to: path.join(__dirname, 'build'),
           force: true,
         },

@@ -1,14 +1,16 @@
-# <img src="src/assets/img/RAI-logo-coin.png" width="64"/> Multicurrency to RAI converter
+# <img src="src/assets/img/RAI-logo-coin.png" width="64"/> Multicurrency RAI
 
 # About
 
-Automatically converts supported currencies on website to RAI based on current exchange rates automatically fetched from CoinGecko API.
+Automatically converts supported currencies on the website to RAI based on current exchange rates that are automatically fetched from the CoinGecko API.
 
 Supported currencies: EUR, CNY, JPY, GBP, KRW, INR and DAI, USDC, sUSD, USDT, PAX, UST, BUSD, LUSD and FLOAT
 
-User is able to turn on/off each currency as well as manually refresh the exchange rates data.
+Each currency conversion can be turned on or off.
+Exchange rates are automatically updated when user interacts with browser.
+A minimal update interval is 10 minutes.
 
-Before it reaches official Google Store you can use it by downloading ZIP from https://github.com/johnmgrimm/multicurrency-rai-chrome-extension/releases/download/v1.0.0/unpacked.zip and then using `chrome://extensions/`, `Developer mode` and `Load unpacked` button point to the directory where you unpack extension files.
+Before extension reaches Chrome Web Store you can use it by downloading ZIP from https://github.com/johnmgrimm/multicurrency-rai-chrome-extension/releases/download/v1.0.1/multicurrency-rai-chrome-extension.zip and then using `chrome://extensions/`, `Developer mode` and `Load unpacked` button point to the directory where you unpack extension files.
 
 ## Code coverage
 
@@ -59,6 +61,12 @@ https://www.amazon.com/AmazonBasics-Kids-Fleece-Tail-Blanket/dp/B0843ZL15Z/ref=s
    3. Click on `Load unpacked extension`
    4. Select the `build` folder (the one inside this repository)
 
+## Deployment
+
+1. Build sources with `yarn build`
+2. Prepare zip package with `yarn zip`
+3. Upload zip package to Chrome Web Store
+
 ## Tests
 
 Run `yarn test` or `yarn test:watch` to run tests continuously.
@@ -66,7 +74,7 @@ Run `yarn test` or `yarn test:watch` to run tests continuously.
 ## Notes
 
 Node v15+ is required for `replaceAll()` to work as expected in tests (https://tekloon.medium.com/how-to-fix-replaceall-is-not-a-function-in-node-js-caf459e00abf).
-Make sure your are using the right version of node.
+Make sure that your are using the right version of the NodeJS.
 You may use NVM to run multiple Node versions https://github.com/nvm-sh/nvm
 
 ## Possible improvements

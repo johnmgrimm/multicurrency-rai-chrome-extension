@@ -1,10 +1,7 @@
 import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import useAsyncRetry from 'react-use/lib/useAsyncRetry';
-import Button from '@mui/material/Button';
 import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import { getStoredData, setStoredData } from '../../shared/storedData';
 import './Options.css';
 import {
@@ -17,7 +14,7 @@ import {
   Link,
   Typography,
 } from '@mui/material';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import { ThemeProvider, styled } from '@mui/material/styles';
 import { LoadingButton } from '@mui/lab';
 import { Save as SaveIcon, Refresh as RefreshIcon } from '@mui/icons-material';
 import { getUpdatedConversionRates } from '../../shared/getUpdatedConversionRates';
@@ -100,10 +97,13 @@ export const Options = () => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="h4" component="h1">
-                Multicurrency to RAI converter - options
+                Multicurrency RAI converter
               </Typography>
               <FormHelperText>
-                Select currencies which will be converted to RAI
+                Select currencies which will be converted to RAI.
+              </FormHelperText>
+              <FormHelperText>
+                Hover over conversion rate number to get a detailed value.
               </FormHelperText>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -123,8 +123,8 @@ export const Options = () => {
               </FormGroup>
             </Grid>
             <Grid item xs={12} md={6}>
-              <FormLabel component="legend">Cryptocurrencies</FormLabel>
               <FormGroup>
+                <FormLabel component="legend">Cryptocurrencies</FormLabel>
                 {currenciesList
                   .filter((currency) => currency.type === 'crypto')
                   .map((currency) => (
