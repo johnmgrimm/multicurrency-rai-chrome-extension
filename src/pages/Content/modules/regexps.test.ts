@@ -206,6 +206,7 @@ test('convertSymbolValuePrices', () => {
     )
   ).toBe('some RAI -2 value RAI3.00 and RAI2 or RAI2');
   expect(convertSymbolValuePrices(0.5, 'usd', '$1.50')).toBe('RAI3.00');
+  // expect(convertSymbolValuePrices(0.5, 'usd', "$\&nbsp;1.50")).toBe('RAI 3.00');
 });
 
 test('convertValueSymbolPrices', () => {

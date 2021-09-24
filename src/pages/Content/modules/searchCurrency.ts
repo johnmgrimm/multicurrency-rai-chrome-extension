@@ -1,5 +1,6 @@
 import { conditionalRatesRefresh } from '../../../shared/conditionalRatesRefresh';
 import { getStoredData } from '../../../shared/storedData';
+import { analyzeNodes } from './analyzeNodes';
 import { walkNode } from './walkNode';
 
 const avoidedTags = [
@@ -30,6 +31,7 @@ export const searchCurrency = async (rootNode?: Node) => {
 
   const treeWalker = document.createTreeWalker(rootNode, NodeFilter.SHOW_TEXT);
 
+  let nodes: { nodeType: string; node: Node; value: string }[] = [];
   while (treeWalker.nextNode()) {
     const node = treeWalker.currentNode;
     if (!node || !node.parentElement) {
@@ -38,12 +40,28 @@ export const searchCurrency = async (rootNode?: Node) => {
     if (avoidedTags.includes(node.parentElement.tagName.toLowerCase())) {
       continue;
     }
-    for (const currencyId of currencies) {
-      const result = walkNode(conversionRates[currencyId], currencyId, node);
-      if (result === 'converted') {
-        break;
-      }
+    const nodeType = walkNode(conversionRates['usd'], 'usd', node);
+    if (nodeType === 'empty') {
+      // skip empty values
+      continue;
     }
+    if (nodeType === 'non-price-value') {
+      // each non-price-value in node triggers nodes array flushing
+      nodes = [];
+    }
+
+    // symbol, value or symbol-value should be pushed to nodes array for price detection
+    nodes.push({ nodeType, node, value: node.nodeValue! });
+
+    //price detection
+    nodes = analyzeNodes(nodes);
+
+    // for (const currencyId of currencies) {
+    // const result = walkNode(conversionRates[currencyId], currencyId, node);
+    // if (result === 'converted') {
+    //   break;
+    // }
+    // }
   }
 
   // post-refresh rates if necessary

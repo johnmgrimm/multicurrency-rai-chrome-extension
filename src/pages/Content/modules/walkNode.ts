@@ -12,6 +12,8 @@ import {
   hasSymbolValuePrice,
   hasValueSymbolPrice,
   hasPriceValue,
+  hasNoValue,
+  hasNonPriceValue,
 } from './utils';
 
 export const walkNode = (
@@ -19,15 +21,25 @@ export const walkNode = (
   currencySymbol: string,
   node?: Node
 ) => {
-  // nodeValue has to be present to analyze the node further
-  if (!node || !node.nodeValue) return 'no currency';
-  // TODO: find a way to get PREV and NEXT siblings
+  if (!node || !node.nodeValue || hasNoValue(node)) return 'empty';
 
-  if (!hasCurrencySymbol(node, currencySymbol)) {
-    // node has no symbol then move to the next node
-    return 'no currency';
+  if (hasNonPriceValue(node, [])) return 'non-price-value';
+
+  let hasSymbol = false;
+  let hasValue = false;
+  if (hasCurrencySymbol(node, currencySymbol)) {
+    hasSymbol = true;
   }
 
+  if (hasPriceValue(node)) {
+    hasValue = true;
+  }
+  if (hasSymbol && hasValue) return 'symbol-value';
+  if (hasSymbol) return 'symbol';
+  if (hasValue) return 'value';
+
+  throw 'Unknown node type';
+  /*
   // Value and symbol within one node
   // so convert it
 
@@ -170,4 +182,5 @@ export const walkNode = (
 
   // TODO: possibly simplify by walking through nodes gathering them in a sliding window
   return 'converted';
+  */
 };

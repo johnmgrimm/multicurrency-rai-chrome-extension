@@ -74,7 +74,7 @@ Run `yarn test` or `yarn test:watch` to run tests continuously.
 ## Notes
 
 Node v15+ is required for `replaceAll()` to work as expected in tests (https://tekloon.medium.com/how-to-fix-replaceall-is-not-a-function-in-node-js-caf459e00abf).
-Make sure that your are using the right version of the NodeJS.
+Make sure that you are using the right version of the NodeJS.
 You may use NVM to run multiple Node versions https://github.com/nvm-sh/nvm
 
 ## Possible improvements
@@ -82,6 +82,53 @@ You may use NVM to run multiple Node versions https://github.com/nvm-sh/nvm
 1. Yen and Yuan symbol looks the same, prefer one over the other
 2. Consider multiple mixed matches support within one DOM node
 3. Use jest-chrome to add more tests to Chrome API based functions
+4. New detection flow:
+   - analyze node-by-node
+   - if node is empty => skip
+   - else if node has only non-symbol values => skip
+   - else if node has symbol value/s
+     - if it has symbol only => look around for a numeric value
+       (there could be an option if you should look PREV first or NEXT first)
+       - if PREV node has only number
+         - if PREV-PREV has coma or dot
+           - get it and look for number in the prev element => convert
+         - else => convert => exit
+       - else if PREV node is empty => skip
+       - else if PREV node has only non-number => break PREV analysis
+       - else if PREV node has numbers and symbols
+         - analyze content starting from the end
+           - if at the end there are non-number values => break PREV analysis
+           - numeric values at the end => get numeric part => convert
+       - else if NEXT node has only number
+         - if NEXT-NEXT has coma or dot
+           - get it and look for number in the next element => convert
+         - else => convert => exit
+       - else if NEXT node is empty => skip
+       - else if NEXT node has only non-number => break PREV analysis
+       - else if NEXT node has numbers and symbols
+         - analyze content starting from the beginning
+       - continue with PREV children or parent-PREV
+       - continue with NEXT children or parent-NEXT
+       - go as deep as necessary (children first then silbings)
+       - if this is the last node => exit
+     - else if it has symbol-number or number-symbol only => convert
+     - else (mixed values with symbol as well) => tokenize
+       - divide further on every non price element => groups are created
+       - convert every group that is surrounded by non-value groups
+       - analyze first group
+         - if not pricelike => skip
+         - else if pricelike
+           - if compelete price symbol+number => convert
+           - if number+symbol => look for possible remaining number parts in PREV nodes e.g. dot or coma
+           - if only number => look for remaining number parts and symbol in PREV nodes
+           - if only symbol => look for number in PREV nodes
+       - analyze last group
+         - if not pricelike => skip
+         - else if pricelike
+           - if compelete price number+symbol => convert
+           - if symbol+number => look for possible remaining number parts in NEXT nodes e.g. dot or coma
+           - if only number => look for remaining number parts and symbol in NEXT nodes
+           - if only symbol => look for number in NEXT nodes
 
 ## Final notes
 

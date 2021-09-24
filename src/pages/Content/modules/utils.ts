@@ -3,6 +3,7 @@ import {
   getSymbolValueRegex,
   getValueSymbolRegex,
   getAmountRegex,
+  convertSymbolValuePrices,
 } from './regexps';
 
 export const hasCurrencySymbol = (
@@ -13,6 +14,21 @@ export const hasCurrencySymbol = (
     node && node.nodeValue && getCurrencyRegexp(currencyId).test(node.nodeValue)
   );
 };
+
+export function hasNoValue(node: Node | ChildNode): boolean {
+  return /^\s*$/.test(`${node.nodeValue}`);
+}
+
+export function hasNonPriceValue(
+  node: Node,
+  enabledCurrenciesList: string[]
+): boolean {
+  const valueString = `${node.nodeValue}`;
+  // loop through all enabled currencies symbols and compare with node value
+  // TODO: test against all currencies
+
+  return getAmountRegex().test(valueString);
+}
 
 export const hasSymbolValuePrice = (
   currencySymbol: string,
@@ -40,3 +56,11 @@ export const hasPriceValue = (node?: Node | ChildNode | null): boolean => {
   }
   return getAmountRegex().test(node.nodeValue);
 };
+
+export function convertNodeSymbolValue(
+  node: Node,
+  conversionRate: number,
+  symbol: string
+) {
+  return convertSymbolValuePrices(conversionRate, symbol, node.nodeValue!);
+}

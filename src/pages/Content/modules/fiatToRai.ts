@@ -15,7 +15,7 @@ export const fiatToRai = (
   fiatPrice: string,
   conversionRate: number
 ): string => {
-  const priceString = (getPriceAsNumber(fiatPrice) / conversionRate).toFixed(
+  const priceString = (getPriceAsNumber(fiatPrice) * conversionRate).toFixed(
     getPricePrecision(fiatPrice)
   );
 
