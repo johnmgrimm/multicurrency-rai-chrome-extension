@@ -1,6 +1,7 @@
 import { conditionalRatesRefresh } from '../../../shared/conditionalRatesRefresh';
 import { getStoredData } from '../../../shared/storedData';
 import { IAllCurrencies } from '../currency';
+import { convertSymbolValue } from '../currency/convertSymbolValue';
 import { getAllSymbolsRegex } from '../currency/getAllSymbolsRegex';
 import { getCurrencyIdFromSymbol } from '../currency/getCurrencyIdFromSymbol';
 import { getIsOnlySymbolRegex } from '../currency/getIsOnlySymbolRegex';
@@ -54,29 +55,11 @@ export async function convertCurrency(
     // has symbol-number or number-symbol only
     if (isNodeMatchingRegex(node, isSymbolValueRegex)) {
       // convert
-      node.nodeValue = node.nodeValue!.replaceAll(
+      node.nodeValue = convertSymbolValue(
+        currenciesList,
+        currencies,
         isSymbolValueRegex,
-        (_match: string, ...groups: string[]) => {
-          const currencySymbol = groups[1] || groups[8];
-          const currencyId = getCurrencyIdFromSymbol(
-            currenciesList,
-            currencySymbol
-          );
-          if (!currencyId) {
-            return '';
-          }
-          const convertedValue = fiatToRai(
-            groups[3] || groups[6],
-            currencies[currencyId].conversionRate
-          );
-
-          if (groups[1]) {
-            // symbol-value case
-            return groups[0] + 'RAI' + groups[2] + convertedValue + groups[4];
-          }
-          // value-symbol case
-          return groups[5] + convertedValue + groups[7] + 'RAI' + groups[9];
-        }
+        node.nodeValue!
       );
 
       continue;

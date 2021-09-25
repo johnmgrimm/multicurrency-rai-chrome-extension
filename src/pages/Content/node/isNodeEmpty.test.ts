@@ -1,28 +1,31 @@
-import { getOuterNode } from './getOuterNode.test';
+import { createDomFromString } from '../../../test-helpers/createDomFromString';
+import { getOuterNodeValue } from '../../../test-helpers/getOuterNodeValue';
 import { isNodeEmpty } from './isNodeEmpty';
 
 describe('isNodeEmpty', () => {
   describe('empty', () => {
     test('no values', () => {
-      const node = getOuterNode('<div></div>');
+      const node = getOuterNodeValue(createDomFromString('<div></div>'));
       expect(isNodeEmpty(node)).toBe(true);
     });
     test('only whitespaces', () => {
-      const node = getOuterNode('<div> &nbsp; </div>');
+      const node = getOuterNodeValue(
+        createDomFromString('<div> &nbsp; </div>')
+      );
       expect(isNodeEmpty(node)).toBe(true);
     });
   });
   describe('non-empty', () => {
     test('characters', () => {
-      const node = getOuterNode('<div>a</div>');
+      const node = getOuterNodeValue(createDomFromString('<div>a</div>'));
       expect(isNodeEmpty(node)).toBe(false);
     });
     test('special signs', () => {
-      const node = getOuterNode('<div>;!#</div>');
+      const node = getOuterNodeValue(createDomFromString('<div>;!#</div>'));
       expect(isNodeEmpty(node)).toBe(false);
     });
     test('with some whitespaces', () => {
-      const node = getOuterNode('<div> a </div>');
+      const node = getOuterNodeValue(createDomFromString('<div> a </div>'));
       expect(isNodeEmpty(node)).toBe(false);
     });
   });
