@@ -6,7 +6,10 @@ import { getAllSymbolsRegex } from '../currency/getAllSymbolsRegex';
 import { getCurrencyIdFromSymbol } from '../currency/getCurrencyIdFromSymbol';
 import { getIsOnlySymbolRegex } from '../currency/getIsOnlySymbolRegex';
 import { getIsSymbolValueRegex } from '../currency/getIsSymbolValueRegex';
+import { valueRegexString } from '../currency/valueRegexString';
+import { convertNodePrice } from '../modules/convertNodePrice';
 import { fiatToRai } from '../modules/fiatToRai';
+import { getClosestMatchingNode } from '../node/getClosestMatchingNode';
 import { isNodeEmpty } from '../node/isNodeEmpty';
 import { isNodeMatchingRegex } from '../node/isNodeMatchingRegex';
 // import { analyzeNodes } from './analyzeNodes';
@@ -24,6 +27,9 @@ const avoidedTags = [
   'audio',
   'video',
 ];
+
+const numericNodeRegex = new RegExp(/\d+?\.?\d+\s*$/, 'gi');
+const validNodeRegex = new RegExp(valueRegexString, 'gi');
 
 // Converts currency data within child nodes
 export async function convertCurrency(
@@ -68,8 +74,31 @@ export async function convertCurrency(
     // has only symbol
     if (isNodeMatchingRegex(node, isOnlySymbolRegex)) {
       // look around for numeric value
-      console.log('look around');
-      // TODO: implement
+      // TODO: ensure that this is a numeric value node
+      const closestNumericNode = getClosestMatchingNode(node, numericNodeRegex);
+      // TODO: support dot separated numbers where dot is in
+      // a separte node
+      if (!closestNumericNode) {
+        // no non-empty nodes
+        continue;
+      }
+      const currencyId = getCurrencyIdFromSymbol(
+        currenciesList,
+        node.nodeValue!
+      );
+      if (!currencyId) {
+        // TODO: highly unlikely to happen, but skip conversion just in case
+        continue;
+      }
+      // handle conversion when price is distributes across different nodes
+      const converted = convertSymbolValue(
+        currenciesList,
+        currencies,
+        isSymbolValueRegex,
+        node.nodeValue + ' ' + closestNumericNode.nodeValue
+      ).split(' ');
+      node.nodeValue = converted[0];
+      closestNumericNode.nodeValue = converted[1];
       continue;
     }
 

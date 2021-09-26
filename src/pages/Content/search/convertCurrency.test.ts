@@ -66,13 +66,53 @@ describe('convertCurrency', () => {
       expect(htmlDom.body.innerHTML).toBe('<div>  RAI\t 5,500.05\x0a</div>');
     });
   });
+
   test('two nodes simplest case', () => {
-    const htmlDom = createDomFromString('<div><b>$</b><i>10.10</i></div>');
+    const htmlDom = createDomFromString('<div><i>10.10</i><b>$</b></div>');
     const node = getOuterNode(htmlDom);
 
     convertCurrency(node, testCurrencies);
 
-    expect(htmlDom.body.innerHTML).toBe('<div><b>RAI</b><i>5.05</i></div>');
+    expect(htmlDom.body.innerHTML).toBe('<div><i>5.05</i><b>RAI</b></div>');
+  });
+
+  test('two nodes ignore non-empty non-numeric value', () => {
+    const htmlDom = createDomFromString(
+      '<div><i>10.10</i>a<b>$</b><i>10.10</i></div>'
+    );
+    const node = getOuterNode(htmlDom);
+
+    convertCurrency(node, testCurrencies);
+
+    expect(htmlDom.body.innerHTML).toBe(
+      '<div><i>10.10</i>a<b>RAI</b><i>5.05</i></div>'
+    );
+  });
+
+  test('two nodes ignore empty value, pick left first', () => {
+    const htmlDom = createDomFromString(
+      '<div><i>10.10</i> <b>$</b> <i>10.10</i></div>'
+    );
+    const node = getOuterNode(htmlDom);
+
+    convertCurrency(node, testCurrencies);
+
+    expect(htmlDom.body.innerHTML).toBe(
+      '<div><i>5.05</i> <b>RAI</b> <i>10.10</i></div>'
+    );
+  });
+
+  test.skip('two nodes ignore empty value, pick left first', () => {
+    const htmlDom = createDomFromString(
+      '<div><i>10</i><a>.10</a> <b>$</b> <i>10.10</i></div>'
+    );
+    const node = getOuterNode(htmlDom);
+
+    convertCurrency(node, testCurrencies);
+
+    expect(htmlDom.body.innerHTML).toBe(
+      '<div><i>5</i><a>.05</a> <b>RAI</b> <i>10.10</i></div>'
+    );
   });
 
   // describe('non-empty', () => {

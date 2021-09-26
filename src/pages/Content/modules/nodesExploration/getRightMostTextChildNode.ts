@@ -6,6 +6,7 @@ export function getRightMostTextChildNode(node: Node | null): Node | null {
     const child = children[i];
 
     if (child.childNodes.length > 0) {
+      // TODO: replace recurence with iteration to speed up
       const last = getRightMostTextChildNode(child);
       if (last && last.nodeValue && last.nodeValue.trim() !== '') {
         return last;
