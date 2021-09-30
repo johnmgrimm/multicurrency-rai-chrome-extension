@@ -2,32 +2,32 @@ import { getIsOnlySymbolRegex } from './getIsOnlySymbolRegex';
 
 describe('getIsOnlySymbolRegex', () => {
   test('one symbol', () => {
-    const allCurrencies = {
-      eur: {
+    const allCurrencies = [
+      {
         id: 'eur',
         symbol: 'EUR',
         regexp: 'EUR|€|euros?',
         type: 'fiat',
       },
-    };
+    ];
     expect(getIsOnlySymbolRegex(allCurrencies).test('EUR')).toBe(true);
     expect(getIsOnlySymbolRegex(allCurrencies).test('EUREUR')).toBe(false);
   });
   test('many symbols', () => {
-    const allCurrencies = {
-      eur: {
+    const allCurrencies = [
+      {
         id: 'eur',
         symbol: 'EUR',
         regexp: 'EUR|€|euros?',
         type: 'fiat',
       },
-      gbp: {
+      {
         id: 'gbp',
         symbol: 'GBP',
         regexp: 'GBP|£|pounds?|quids?',
         type: 'fiat',
       },
-    };
+    ];
     expect(getIsOnlySymbolRegex(allCurrencies).test('EUR')).toBe(true);
     expect(getIsOnlySymbolRegex(allCurrencies).test('  EUR ')).toBe(true);
     expect(getIsOnlySymbolRegex(allCurrencies).test('pound')).toBe(true);

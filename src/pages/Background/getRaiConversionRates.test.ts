@@ -101,21 +101,21 @@ describe('getConversionRate', () => {
       'https://api.coingecko.com/api/v3/simple/price?ids=rai,dai,usd-coin,nusd,terrausd,payperex,binance-usd,liquity-usd,float-protocol-float&vs_currencies=usd,eur,cny,jpy,gbp,krw,inr'
     );
     expect(rates).toStrictEqual({
-      'usd-coin': 3.02,
-      'binance-usd': 3.02,
-      nusd: 0.993711 * 3.02,
-      terrausd: 1.01 * 3.02,
-      dai: 3.02,
-      payperex: 9.45 * 3.02,
-      'float-protocol-float': 1.44 * 3.02,
-      'liquity-usd': 3.02,
-      usd: 3.02,
-      eur: 2.57,
-      cny: 19.5,
-      jpy: 331.57,
-      gbp: 2.2,
-      krw: 3565.28,
-      inr: 222.29,
+      'binance-usd': 0.33112582781456956,
+      cny: 0.05128205128205128,
+      dai: 0.33112582781456956,
+      eur: 0.38910505836575876,
+      'float-protocol-float': 0.2299484915378955,
+      gbp: 0.45454545454545453,
+      inr: 0.004498627918484863,
+      jpy: 0.0030159543987694905,
+      krw: 0.00028048287932504597,
+      'liquity-usd': 0.33112582781456956,
+      nusd: 0.3332214575611718,
+      payperex: 0.03503977013910789,
+      terrausd: 0.327847354271851,
+      usd: 0.33112582781456956,
+      'usd-coin': 0.33112582781456956,
     });
   });
 });
@@ -123,21 +123,21 @@ describe('getConversionRate', () => {
 describe('convertToRaiConversionRates', () => {
   test('happy path', () => {
     expect(convertToRaiConversionRates(apiResponseJson)).toStrictEqual({
-      'usd-coin': 3.02,
-      'binance-usd': 3.02,
-      nusd: 0.993711 * 3.02,
-      terrausd: 1.01 * 3.02,
-      dai: 3.02,
-      payperex: 9.45 * 3.02,
-      'float-protocol-float': 1.44 * 3.02,
-      'liquity-usd': 3.02,
-      usd: 3.02,
-      eur: 2.57,
-      cny: 19.5,
-      jpy: 331.57,
-      gbp: 2.2,
-      krw: 3565.28,
-      inr: 222.29,
+      'binance-usd': 0.33112582781456956,
+      cny: 0.05128205128205128,
+      dai: 0.33112582781456956,
+      eur: 0.38910505836575876,
+      'float-protocol-float': 0.2299484915378955,
+      gbp: 0.45454545454545453,
+      inr: 0.004498627918484863,
+      jpy: 0.0030159543987694905,
+      krw: 0.00028048287932504597,
+      'liquity-usd': 0.33112582781456956,
+      nusd: 0.3332214575611718,
+      payperex: 0.03503977013910789,
+      terrausd: 0.327847354271851,
+      usd: 0.33112582781456956,
+      'usd-coin': 0.33112582781456956,
     });
   });
 });

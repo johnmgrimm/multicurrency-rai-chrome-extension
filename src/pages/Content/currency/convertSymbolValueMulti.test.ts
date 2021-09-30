@@ -1,7 +1,7 @@
-import { convertSymbolValue } from './convertSymbolValue';
-import { getIsSymbolValueRegex } from './getIsSymbolValueRegex';
+import { convertSymbolValueMulti } from './convertSymbolValueMulti';
+import { getIsSymbolValueMultimatchRegex } from './getIsSymbolValueRegexMultimatch';
 
-describe('convertSymbolValue', () => {
+describe('convertSymbolValueMulti', () => {
   const allCurrencies = [
     {
       id: 'eur',
@@ -17,11 +17,11 @@ describe('convertSymbolValue', () => {
     },
   ];
   const conversionRates = { eur: 0.5, usd: 0.1 };
-  const symbolValueRegex = getIsSymbolValueRegex(allCurrencies);
+  const symbolValueRegex = getIsSymbolValueMultimatchRegex(allCurrencies);
   describe('symbol-value', () => {
     test('many decimal places', () => {
       expect(
-        convertSymbolValue(
+        convertSymbolValueMulti(
           allCurrencies,
           conversionRates,
           symbolValueRegex,
@@ -32,7 +32,7 @@ describe('convertSymbolValue', () => {
     test.skip('spaces in between value', () => {
       // TODO: add support
       expect(
-        convertSymbolValue(
+        convertSymbolValueMulti(
           allCurrencies,
           conversionRates,
           symbolValueRegex,
@@ -42,7 +42,7 @@ describe('convertSymbolValue', () => {
     });
     test('with invalid comma position', () => {
       expect(
-        convertSymbolValue(
+        convertSymbolValueMulti(
           allCurrencies,
           conversionRates,
           symbolValueRegex,
@@ -52,7 +52,7 @@ describe('convertSymbolValue', () => {
     });
     test('simple', () => {
       expect(
-        convertSymbolValue(
+        convertSymbolValueMulti(
           allCurrencies,
           conversionRates,
           symbolValueRegex,
@@ -62,7 +62,7 @@ describe('convertSymbolValue', () => {
     });
     test('dots, commas and whitespaces', () => {
       expect(
-        convertSymbolValue(
+        convertSymbolValueMulti(
           allCurrencies,
           conversionRates,
           symbolValueRegex,
@@ -74,7 +74,7 @@ describe('convertSymbolValue', () => {
   describe('value-symbol', () => {
     test('simple', () => {
       expect(
-        convertSymbolValue(
+        convertSymbolValueMulti(
           allCurrencies,
           conversionRates,
           symbolValueRegex,
@@ -84,7 +84,7 @@ describe('convertSymbolValue', () => {
     });
     test('dots, commas and whitespaces', () => {
       expect(
-        convertSymbolValue(
+        convertSymbolValueMulti(
           allCurrencies,
           conversionRates,
           symbolValueRegex,
@@ -94,13 +94,53 @@ describe('convertSymbolValue', () => {
     });
     test('another currency', () => {
       expect(
-        convertSymbolValue(
+        convertSymbolValueMulti(
           allCurrencies,
           conversionRates,
           symbolValueRegex,
           '  dollar\t10,000.01\x0a '
         )
       ).toBe('  RAI\t1,000.00\x0a ');
+    });
+  });
+  describe('multiple mathes', () => {
+    test('all valid', () => {
+      expect(
+        convertSymbolValueMulti(
+          allCurrencies,
+          conversionRates,
+          symbolValueRegex,
+          '  €\t10,000.01\x0a 10$'
+        )
+      ).toBe('  RAI\t5,000.01\x0a 1RAI');
+      expect(
+        convertSymbolValueMulti(
+          allCurrencies,
+          conversionRates,
+          symbolValueRegex,
+          ' 10$ asbsdf €10,000 1$ $$'
+        )
+      ).toBe(' 1RAI asbsdf RAI5,000 0RAI $$');
+    });
+    test.skip('invalid first and last case 1', () => {
+      expect(
+        convertSymbolValueMulti(
+          allCurrencies,
+          conversionRates,
+          symbolValueRegex,
+          '$ 10$ asbsdf 10,000€ 10'
+        )
+      ).toBe('$ 1RAI asbsdf 5,000RAI 10');
+    });
+    test.skip('invalid first and last case 2', () => {
+      expect(
+        convertSymbolValueMulti(
+          allCurrencies,
+          conversionRates,
+          symbolValueRegex,
+          '10 $10 asbsdf €10,000 €'
+        )
+      ).toBe('10 RAI1 asbsdf RAI5,000 €');
     });
   });
 });

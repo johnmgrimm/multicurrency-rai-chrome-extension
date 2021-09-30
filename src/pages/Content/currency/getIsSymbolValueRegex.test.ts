@@ -2,33 +2,33 @@ import { getIsSymbolValueRegex } from './getIsSymbolValueRegex';
 
 describe('getIsSymbolValueRegex', () => {
   test('one symbol', () => {
-    const allCurrencies = {
-      eur: {
+    const allCurrencies = [
+      {
         id: 'eur',
         symbol: 'EUR',
         regexp: 'EUR|€|euros?',
         type: 'fiat',
       },
-    };
+    ];
     expect(getIsSymbolValueRegex(allCurrencies).test('EUR1')).toBe(true);
     expect(getIsSymbolValueRegex(allCurrencies).test(' EUR     1 ')).toBe(true);
     expect(getIsSymbolValueRegex(allCurrencies).test('EUR')).toBe(false);
   });
   describe('many symbols', () => {
-    const allCurrencies = {
-      eur: {
+    const allCurrencies = [
+      {
         id: 'eur',
         symbol: 'EUR',
         regexp: 'EUR|€|euros?',
         type: 'fiat',
       },
-      gbp: {
+      {
         id: 'gbp',
         symbol: 'GBP',
         regexp: 'GBP|£|pounds?|quids?',
         type: 'fiat',
       },
-    };
+    ];
     test('matches', () => {
       expect(getIsSymbolValueRegex(allCurrencies).test('EUR2')).toBe(true);
       expect(getIsSymbolValueRegex(allCurrencies).test('pounds 10')).toBe(true);

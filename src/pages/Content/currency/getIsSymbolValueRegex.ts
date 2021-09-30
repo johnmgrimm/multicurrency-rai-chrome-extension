@@ -1,8 +1,9 @@
 import { IAllCurrencies } from '.';
+import { CurrencyData } from '../../../shared/consts';
 import { valueRegexString } from './valueRegexString';
 
-export function getIsSymbolValueRegex(currencies: IAllCurrencies) {
-  const allCurrenciesRegex = Object.values(currencies)
+export function getIsSymbolValueRegex(currencies: CurrencyData[]) {
+  const allCurrenciesRegex = currencies
     .map((currency) => currency.regexp)
     .join('|');
 

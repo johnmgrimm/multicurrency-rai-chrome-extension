@@ -4,22 +4,11 @@ import './Popup.css';
 import { ThemeProvider, styled } from '@mui/material/styles';
 import { OpenInNewOutlined as OpenInNewOutlinedIcon } from '@mui/icons-material';
 import { theme } from '../../shared/theme';
-import {
-  Container,
-  FormHelperText,
-  FormLabel,
-  Grid,
-  Typography,
-} from '@mui/material';
+import { Container } from '@mui/material';
 import { useAsyncRetry } from 'react-use';
 import { getStoredData } from '../../shared/storedData';
-import {
-  allCurrencies,
-  autoUpdateInterval,
-  StoredData,
-} from '../../shared/consts';
-import { getDateStringFromNumber } from '../../shared/getDateStringFromNumber';
-import { ConversionRate } from './ConversionRate';
+import { StoredData } from '../../shared/consts';
+import Content from './Content';
 
 const OptionsButton = styled(Button)(({ theme }) => ({
   background: `linear-gradient(225deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
@@ -34,36 +23,11 @@ const Popup = () => {
   return (
     <ThemeProvider theme={theme}>
       <Container>
-        <Typography variant="h6" component="h1">
-          Current RAI prices
-        </Typography>
-        <FormHelperText>For enabled currencies</FormHelperText>
-        <br />
-        <Grid container spacing={0}>
-          {storedData &&
-            storedData.value &&
-            storedData.value.enabled.map((currencyId) => (
-              <Grid item xs={12} key={currencyId}>
-                <ConversionRate
-                  currencyId={currencyId}
-                  currencySymbol={allCurrencies[currencyId].symbol}
-                  conversionRate={storedData?.value?.conversionRates[
-                    currencyId
-                  ].toFixed(2)}
-                  showLink
-                />
-              </Grid>
-            ))}
-        </Grid>
-        <br />
-        <FormHelperText>Values are rounded to 2 decimal places</FormHelperText>
-        <FormHelperText>
-          Last conversion rates update:
-          <br />
-          <strong>
-            {getDateStringFromNumber(storedData?.value?.lastRatesUpdate)}
-          </strong>
-        </FormHelperText>
+        {storedData && storedData.value ? (
+          <Content storedData={storedData.value} />
+        ) : (
+          <div>Loading...</div>
+        )}
         <br />
         <OptionsButton
           fullWidth

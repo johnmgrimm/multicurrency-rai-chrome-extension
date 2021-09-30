@@ -1,11 +1,11 @@
 import { IAllCurrencies } from '.';
+import { CurrencyData } from '../../../shared/consts';
 
-export function getAllSymbolsRegex(currencies: IAllCurrencies) {
+export function getAllSymbolsRegex(currencies: CurrencyData[]) {
   return new RegExp(
     '(?<![A-Za-z])(' +
-      Object.values(currencies)
-        .map((currency) => currency.regexp)
-        .join('|') +
-      ')(?![A-Za-z])'
+      currencies.map((currency) => currency.regexp).join('|') +
+      ')(?![A-Za-z])',
+    'gi'
   );
 }

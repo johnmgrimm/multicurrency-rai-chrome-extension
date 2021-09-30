@@ -1,19 +1,15 @@
-import { conditionalRatesRefresh } from '../../../shared/conditionalRatesRefresh';
+import { allCurrencies } from '../../../shared/consts';
 import { getStoredData } from '../../../shared/storedData';
-import { IAllCurrencies } from '../currency';
 import { convertSymbolValue } from '../currency/convertSymbolValue';
+import { convertSymbolValueMulti } from '../currency/convertSymbolValueMulti';
 import { getAllSymbolsRegex } from '../currency/getAllSymbolsRegex';
 import { getCurrencyIdFromSymbol } from '../currency/getCurrencyIdFromSymbol';
 import { getIsOnlySymbolRegex } from '../currency/getIsOnlySymbolRegex';
 import { getIsSymbolValueRegex } from '../currency/getIsSymbolValueRegex';
-import { valueRegexString } from '../currency/valueRegexString';
-import { convertNodePrice } from '../modules/convertNodePrice';
-import { fiatToRai } from '../modules/fiatToRai';
+import { getIsSymbolValueMultimatchRegex } from '../currency/getIsSymbolValueRegexMultimatch';
 import { getClosestMatchingNode } from '../node/getClosestMatchingNode';
 import { isNodeEmpty } from '../node/isNodeEmpty';
 import { isNodeMatchingRegex } from '../node/isNodeMatchingRegex';
-// import { analyzeNodes } from './analyzeNodes';
-// import { walkNode } from './walkNode';
 
 const avoidedTags = [
   'html',
@@ -29,17 +25,26 @@ const avoidedTags = [
 ];
 
 const numericNodeRegex = new RegExp(/\d+?\.?\d+\s*$/, 'gi');
-const validNodeRegex = new RegExp(valueRegexString, 'gi');
 
 // Converts currency data within child nodes
-export async function convertCurrency(
-  rootNode: Node,
-  currencies: IAllCurrencies
-) {
-  const currenciesList = Object.values(currencies);
-  const allSymbolsRegex = getAllSymbolsRegex(currencies);
-  const isOnlySymbolRegex = getIsOnlySymbolRegex(currencies);
-  const isSymbolValueRegex = getIsSymbolValueRegex(currencies);
+export async function convertCurrency(rootNode: Node) {
+  const startTime = Date.now();
+  console.log('conversion start', startTime);
+  const storedData = await getStoredData();
+  // console.log('storedData', storedData);
+  const conversionRates = storedData.conversionRates;
+  // const currencies = storedData.enabled;
+  // Handler when the DOM is fully loaded
+  // Replace current body
+  // console.log('searching');
+  const currenciesList = allCurrencies.filter((currency) =>
+    storedData.enabled.includes(currency.id)
+  );
+  const allSymbolsRegex = getAllSymbolsRegex(currenciesList);
+  const isOnlySymbolRegex = getIsOnlySymbolRegex(currenciesList);
+  const symbolValueRegex = getIsSymbolValueRegex(currenciesList);
+  const symbolValueMultimatchRegex =
+    getIsSymbolValueMultimatchRegex(currenciesList);
   const treeWalker = document.createTreeWalker(rootNode, NodeFilter.SHOW_TEXT);
 
   while (treeWalker.nextNode()) {
@@ -59,12 +64,12 @@ export async function convertCurrency(
     // node has some currency symbol/s
 
     // has symbol-number or number-symbol only
-    if (isNodeMatchingRegex(node, isSymbolValueRegex)) {
+    if (isNodeMatchingRegex(node, symbolValueRegex)) {
       // convert
       node.nodeValue = convertSymbolValue(
         currenciesList,
-        currencies,
-        isSymbolValueRegex,
+        conversionRates,
+        symbolValueRegex,
         node.nodeValue!
       );
 
@@ -76,8 +81,6 @@ export async function convertCurrency(
       // look around for numeric value
       // TODO: ensure that this is a numeric value node
       const closestNumericNode = getClosestMatchingNode(node, numericNodeRegex);
-      // TODO: support dot separated numbers where dot is in
-      // a separte node
       if (!closestNumericNode) {
         // no non-empty nodes
         continue;
@@ -90,29 +93,27 @@ export async function convertCurrency(
         // TODO: highly unlikely to happen, but skip conversion just in case
         continue;
       }
-      // handle conversion when price is distributes across different nodes
+      // handle conversion when price is distributes across two different nodes
       const converted = convertSymbolValue(
         currenciesList,
-        currencies,
-        isSymbolValueRegex,
+        conversionRates,
+        symbolValueRegex,
         node.nodeValue + ' ' + closestNumericNode.nodeValue
       ).split(' ');
       node.nodeValue = converted[0];
       closestNumericNode.nodeValue = converted[1];
       continue;
     }
+    // TODO: support dot separated numbers where dot is in
+    // a separte node, so three elements integer+dot+fraction
 
-    // mixed symbols numbers and others
-
-    // TODO: most complex case
-
-    // TODO: continue by adding simplest tests for convertCurrency function
-
-    // for (const currencyId of currencies) {
-    // const result = walkNode(conversionRates[currencyId], currencyId, node);
-    // if (result === 'converted') {
-    //   break;
-    // }
-    // }
+    // has symbol/s but also other characters
+    node.nodeValue = convertSymbolValueMulti(
+      currenciesList,
+      conversionRates,
+      symbolValueMultimatchRegex,
+      node.nodeValue!
+    );
   }
+  console.log('conversion end', Date.now() - startTime);
 }

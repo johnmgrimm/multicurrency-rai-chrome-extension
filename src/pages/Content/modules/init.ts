@@ -1,11 +1,8 @@
-import { searchCurrency } from './searchCurrency';
 import { startObserver } from './mutationObserver';
+import { convertCurrency } from '../search/convertCurrency';
 
-const callback = () => {
-  // Handler when the DOM is fully loaded
-  // Replace current body
-  // console.log('searching');
-  searchCurrency(window.document);
+const callback = async () => {
+  await convertCurrency(window.document);
 };
 
 export const init = () => {

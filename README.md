@@ -112,7 +112,8 @@ You may use NVM to run multiple Node versions https://github.com/nvm-sh/nvm
        - go as deep as necessary (children first then silbings)
        - if this is the last node => exit
      - else if it has symbol-number or number-symbol only => convert
-     - else (mixed values with symbol as well) => tokenize
+     - else (mixed values with symbol as well as random text)
+       - convert every regex matching price
        - divide further on every non price element => groups are created
        - convert every group that is surrounded by non-value groups
        - analyze first group
