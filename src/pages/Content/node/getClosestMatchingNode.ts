@@ -39,8 +39,14 @@ export function getClosestMatchingNode(
           // e.g. <b><b>sibling</b></b><b>start</b>
           const prevSiblingTextNode = getRightMostTextChildNode(prevNode);
 
-          if (prevSiblingTextNode) {
-            return prevSiblingTextNode;
+          if (prevSiblingTextNode && prevSiblingTextNode.nodeValue) {
+            validNodeRegex.lastIndex = 0;
+            if (validNodeRegex.test(prevSiblingTextNode.nodeValue)) {
+              // contains numeric value
+              return prevSiblingTextNode;
+            } else {
+              return null;
+            }
           }
 
           // loop over whitespace-only siblings
@@ -72,10 +78,16 @@ export function getClosestMatchingNode(
           // prev sibling is not a text node loop though its children
           // e.g. <b>sibling</b><b>start</b>
           // e.g. <b><b>sibling</b></b><b>start</b>
-          const prevSiblingTextNode = getLeftMostTextChildNode(nextNode);
+          const nextSiblingTextNode = getLeftMostTextChildNode(nextNode);
 
-          if (prevSiblingTextNode) {
-            return prevSiblingTextNode;
+          if (nextSiblingTextNode && nextSiblingTextNode.nodeValue) {
+            validNodeRegex.lastIndex = 0;
+            if (validNodeRegex.test(nextSiblingTextNode.nodeValue)) {
+              // contains numeric value
+              return nextSiblingTextNode;
+            } else {
+              return null;
+            }
           }
 
           // loop over whitespace-only siblings

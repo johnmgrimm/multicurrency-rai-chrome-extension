@@ -103,7 +103,7 @@ describe('convertSymbolValueMulti', () => {
       ).toBe('  RAI\t1,000.00\x0a ');
     });
   });
-  describe('multiple mathes', () => {
+  describe('multiple matches', () => {
     test('all valid', () => {
       expect(
         convertSymbolValueMulti(
@@ -121,6 +121,14 @@ describe('convertSymbolValueMulti', () => {
           ' 10$ asbsdf €10,000 1$ $$'
         )
       ).toBe(' 1RAI asbsdf RAI5,000 0RAI $$');
+      expect(
+        convertSymbolValueMulti(
+          allCurrencies,
+          conversionRates,
+          symbolValueRegex,
+          '22,222.22 $ - 55 $'
+        )
+      ).toBe('2,222.22 RAI - 6 RAI');
     });
     test.skip('invalid first and last case 1', () => {
       expect(

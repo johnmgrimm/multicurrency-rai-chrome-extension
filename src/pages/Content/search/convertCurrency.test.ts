@@ -28,6 +28,15 @@ describe('convertCurrency', () => {
 
       expect(htmlDom.body.innerHTML).toBe('<div>$ then 10.10</div>');
     });
+
+    test.only('non-numeric node', async () => {
+      const htmlDom = createDomFromString('<div><i>$</i><i>abc</i></div>');
+      const node = getOuterNode(htmlDom);
+
+      await convertCurrency(node);
+
+      expect(htmlDom.body.innerHTML).toBe('<div><i>$</i><i>abc</i></div>');
+    });
   });
   describe('convert', () => {
     test('multiple simple matches', async () => {
@@ -61,25 +70,27 @@ describe('convertCurrency', () => {
       expect(htmlDom.body.innerHTML).toBe('<div>  RAI\t 5,500.05\x0a</div>');
     });
 
-    test.skip('multiple values in one node', async () => {
-      const htmlDom = createDomFromString(
-        '<div>22,222.33 US DOLLARS - 18 euro</div>'
-      );
+    test('multiple values in one node', async () => {
+      const htmlDom = createDomFromString('<div>10 $ - 10 eur</div>');
       const node = getOuterNode(htmlDom);
 
       await convertCurrency(node);
 
-      expect(htmlDom.body.innerHTML).toBe('<div>11,111.17 RAI - 5 RAI</div>');
+      expect(htmlDom.body.innerHTML).toBe('<div>5 RAI - 3 RAI</div>');
     });
   });
 
   test('two nodes simplest case', async () => {
-    const htmlDom = createDomFromString('<div><i>10.10</i><b>$</b></div>');
+    const htmlDom = createDomFromString(
+      '<div><span> $ </span> <span> 222.22 </span></div>'
+    );
     const node = getOuterNode(htmlDom);
 
     await convertCurrency(node);
 
-    expect(htmlDom.body.innerHTML).toBe('<div><i>5.05</i><b>RAI</b></div>');
+    expect(htmlDom.body.innerHTML).toBe(
+      '<div><span> RAI </span> <span> 111.11 </span></div>'
+    );
   });
 
   test('two nodes ignore non-empty non-numeric value', async () => {

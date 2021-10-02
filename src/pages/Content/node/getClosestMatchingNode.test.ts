@@ -44,6 +44,7 @@ describe('getClosestMatchingNode', () => {
       const node = getStartNodeFromHtmlString(
         '<b>10</b><b><i id="start"></i></b>'
       );
+      //TODO: this should pass
       expect(getClosestMatchingNode(node, validNodeRegex).nodeValue).toBe('10');
     });
     test('parent ignore prev sibling pick deeply nested next', () => {
@@ -88,6 +89,32 @@ describe('getClosestMatchingNode', () => {
       expect(getClosestMatchingNode(node, numericNodeRegex).nodeValue).toBe(
         '11'
       );
+    });
+  });
+  describe('return null', () => {
+    test('non-numeric is closest next', () => {
+      const node = getStartNodeFromHtmlString(
+        '<b><i id="start"></i><i>$</i>10</b>'
+      );
+      expect(getClosestMatchingNode(node, numericNodeRegex)).toBe(null);
+    });
+    test('non-numeric is closest next after whitespace', () => {
+      const node = getStartNodeFromHtmlString(
+        '<b><i id="start"></i><i> </i><a>sth</a></b>'
+      );
+      expect(getClosestMatchingNode(node, numericNodeRegex)).toBe(null);
+    });
+    test('non-numeric is closest prev', () => {
+      const node = getStartNodeFromHtmlString(
+        '<b>10<i>$</i><i id="start"></i></b>'
+      );
+      expect(getClosestMatchingNode(node, numericNodeRegex)).toBe(null);
+    });
+    test('non-numeric is closest prev after whitespace', () => {
+      const node = getStartNodeFromHtmlString(
+        '<b><i>sth</i><a> </a><i id="start"></i></b>'
+      );
+      expect(getClosestMatchingNode(node, numericNodeRegex)).toBe(null);
     });
   });
 });

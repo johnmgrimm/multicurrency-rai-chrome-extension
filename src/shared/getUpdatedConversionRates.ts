@@ -14,7 +14,7 @@ export async function getUpdatedConversionRates(
 
   try {
     const newRates = await getRaiConversionRates();
-    console.log('getUpdatedConversionRates', newRates);
+    // console.log('getUpdatedConversionRates', newRates);
     // console.log('new rates', newRates);
     for (const currency of currenciesList) {
       // console.log('updating', currencySymbol, newRates[currencySymbol]);
