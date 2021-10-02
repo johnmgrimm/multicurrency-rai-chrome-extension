@@ -1,15 +1,15 @@
-import { valueRegexString } from '../currency/valueRegexString';
 import { getLeftMostTextChildNode } from '../modules/nodesExploration/getLeftMostTextChildNode';
 import { getRightMostTextChildNode } from '../modules/nodesExploration/getRightMostTextChildNode';
 
 // Lookup strategy: left, right, parent repeat
 export function getClosestMatchingNode(
   node: Node,
-  validNodeRegex: RegExp
-): Node | null {
+  validNodeRegex: RegExp,
+  direction?: 'next' | 'prev'
+): { node: Node | null; dir: 'prev' | 'next' | null } {
   let currentNode: Node | null = node;
-  let skipPrevNodes = false;
-  let skipNextNodes = false;
+  let skipPrevNodes = direction == 'next' ? true : false;
+  let skipNextNodes = direction == 'prev' ? true : false;
 
   do {
     let prevNode = currentNode.previousSibling;
@@ -25,10 +25,10 @@ export function getClosestMatchingNode(
         ) {
           validNodeRegex.lastIndex = 0;
           if (validNodeRegex.test(prevNode.nodeValue)) {
-            // contains numeric value
-            return prevNode;
+            // contains matching value
+            return { node: prevNode, dir: 'prev' };
           } else {
-            // contains non-numeric value
+            // contains non-matching value
             prevNode = null;
             // skip further looking left
             skipPrevNodes = true;
@@ -42,10 +42,11 @@ export function getClosestMatchingNode(
           if (prevSiblingTextNode && prevSiblingTextNode.nodeValue) {
             validNodeRegex.lastIndex = 0;
             if (validNodeRegex.test(prevSiblingTextNode.nodeValue)) {
-              // contains numeric value
-              return prevSiblingTextNode;
+              // contains matchin value
+              return { node: prevSiblingTextNode, dir: 'prev' };
             } else {
-              return null;
+              // contains non-matching value
+              return { node: null, dir: 'prev' };
             }
           }
 
@@ -66,10 +67,10 @@ export function getClosestMatchingNode(
         ) {
           validNodeRegex.lastIndex = 0;
           if (validNodeRegex.test(nextNode.nodeValue)) {
-            // contains numeric value
-            return nextNode;
+            // contains matching value
+            return { node: nextNode, dir: 'next' };
           } else {
-            // contains non-numeric value
+            // contains non-matching value
             nextNode = null;
             // skip further looking right
             skipNextNodes = true;
@@ -83,10 +84,10 @@ export function getClosestMatchingNode(
           if (nextSiblingTextNode && nextSiblingTextNode.nodeValue) {
             validNodeRegex.lastIndex = 0;
             if (validNodeRegex.test(nextSiblingTextNode.nodeValue)) {
-              // contains numeric value
-              return nextSiblingTextNode;
+              // contains matching value
+              return { node: nextSiblingTextNode, dir: 'next' };
             } else {
-              return null;
+              return { node: null, dir: 'next' };
             }
           }
 
@@ -102,5 +103,5 @@ export function getClosestMatchingNode(
     currentNode = currentNode.parentNode;
   } while (currentNode);
 
-  return null;
+  return { node: null, dir: null };
 }

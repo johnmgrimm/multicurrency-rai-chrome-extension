@@ -1,13 +1,11 @@
 import { allCurrencies } from '../../../shared/consts';
 import { getStoredData } from '../../../shared/storedData';
 import { convertSymbol } from '../currency/convertSymbol';
-import { convertSymbolValue } from '../currency/convertSymbolValue';
 import { convertSymbolValueMulti } from '../currency/convertSymbolValueMulti';
 import { convertValue } from '../currency/convertValue';
 import { getAllSymbolsRegex } from '../currency/getAllSymbolsRegex';
 import { getCurrencyIdFromSymbol } from '../currency/getCurrencyIdFromSymbol';
 import { getIsOnlySymbolRegex } from '../currency/getIsOnlySymbolRegex';
-import { getIsSymbolValueRegex } from '../currency/getIsSymbolValueRegex';
 import { getIsSymbolValueMultimatchRegex } from '../currency/getIsSymbolValueRegexMultimatch';
 import { getSymbolRegex } from '../currency/getSymbolRegex';
 import { valueRegexString } from '../currency/valueRegexString';
@@ -51,7 +49,7 @@ export async function convertCurrency(rootNode: Node) {
   );
   const allSymbolsRegex = getAllSymbolsRegex(currenciesList);
   const isOnlySymbolRegex = getIsOnlySymbolRegex(currenciesList);
-  const symbolValueRegex = getIsSymbolValueRegex(currenciesList);
+  // const symbolValueRegex = getIsSymbolValueRegex(currenciesList);
   const symbolValueMultimatchRegex =
     getIsSymbolValueMultimatchRegex(currenciesList);
   const treeWalker = document.createTreeWalker(rootNode, NodeFilter.SHOW_TEXT);
