@@ -1,4 +1,3 @@
-import { IAllCurrencies } from '.';
 import { CurrencyData } from '../../../shared/consts';
 
 export function getAllSymbolsRegex(currencies: CurrencyData[]) {

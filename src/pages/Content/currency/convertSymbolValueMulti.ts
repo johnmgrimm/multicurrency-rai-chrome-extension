@@ -1,4 +1,3 @@
-import { IAllCurrencies } from '.';
 import { ConversionRates, CurrencyData } from '../../../shared/consts';
 import { fiatToRai } from '../modules/fiatToRai';
 import { getCurrencyIdFromSymbol } from './getCurrencyIdFromSymbol';

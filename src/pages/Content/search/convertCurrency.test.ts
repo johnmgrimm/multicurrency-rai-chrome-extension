@@ -132,44 +132,61 @@ describe('convertCurrency', () => {
     );
   });
 
-  // TODO: support that
-  test.skip('two nodes ignore empty value, pick left first', async () => {
+  test('two nodes ignore empty value, pick left first', async () => {
     const htmlDom = createDomFromString(
-      '<div><i>10</i><a>.10</a> <b>$</b> <a></a><i>10.10</i></div>'
+      '<div><i>9</i><a>.10</a> <b>$</b> <a></a><i>10.10</i></div>'
     );
     const node = getOuterNode(htmlDom);
 
     await convertCurrency(node);
 
     expect(htmlDom.body.innerHTML).toBe(
-      '<div><i>5</i><a>.05</a> <b>RAI</b> <a></a><i>10.10</i></div>'
+      '<div><i>4</i><a>.55</a> <b>RAI</b> <a></a><i>10.10</i></div>'
     );
   });
-  test.skip('three nodes ignore empty value, pick left first', async () => {
+
+  test('two nodes without separator', async () => {
     const htmlDom = createDomFromString(
-      '<div><i>10,000</i> . <a>10</a> <b>$</b> <a></a><i>10.10</i></div>'
+      '<div><i>9</i><a>10</a> <b>$</b> <a></a><i>10.10</i></div>'
     );
     const node = getOuterNode(htmlDom);
 
     await convertCurrency(node);
 
     expect(htmlDom.body.innerHTML).toBe(
-      '<div><i>5,000</i> . <a>05</a> <b>RAI</b> <a></a><i>10.10</i></div>'
+      '<div><i>4</i><a>55</a> <b>RAI</b> <a></a><i>10.10</i></div>'
     );
   });
 
-  // describe('non-empty', () => {
-  //   test('characters', () => {
-  //     const node = getOuterNode('<div>a</div>');
-  //     expect(await convertCurrency(node, /[b-z]/)).toBe(false);
-  //   });
-  //   test('special signs', () => {
-  //     const node = getOuterNode('<div>;!#</div>');
-  //     expect(await convertCurrency(node, /[0-9]/)).toBe(false);
-  //   });
-  //   test('with some whitespaces', () => {
-  //     const node = getOuterNode('<div> a </div>');
-  //     expect(await convertCurrency(node, /[A-Z]/)).toBe(false);
-  //   });
+  test('three nodes ignore empty value, pick left first', async () => {
+    const htmlDom = createDomFromString(
+      '<div><i>9,009</i> . <a>10</a> <b>$</b> <a></a><i>10.10</i></div>'
+    );
+    const node = getOuterNode(htmlDom);
+
+    await convertCurrency(node);
+
+    expect(htmlDom.body.innerHTML).toBe(
+      '<div><i>4,504</i> . <a>55</a> <b>RAI</b> <a></a><i>10.10</i></div>'
+    );
+  });
+
+  // test.only('three nodes ignore empty value, pick left first', async () => {
+  //   const htmlDom = createDomFromString(
+  //     `<div><p>
+  //       <span> 98 </span> <span style="font-size: small"> 99 </span>
+  //       <span> USD </span>
+  //     </p></div>`
+  //   );
+  //   const node = getOuterNode(htmlDom);
+
+  //   await convertCurrency(node);
+
+  //   expect(htmlDom.body.innerHTML).toBe(
+  //     `<div><p>
+  //       <span> 49 </span> <span style="font-size: small"> 99 </span>
+  //       <span> RAI </span>
+  //     </p></div>`
+  //   );
   // });
 });

@@ -1,4 +1,3 @@
-import { IAllCurrencies } from '.';
 import { CurrencyData } from '../../../shared/consts';
 import { valueRegexString } from './valueRegexString';
 

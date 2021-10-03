@@ -1,10 +1,7 @@
-import { createDomFromString } from '../../../test-helpers/createDomFromString';
+import { getStartNodeFromHtmlString } from '../../../test-helpers/getStartNodeFromHtmlString';
 import { valueRegexString } from '../currency/valueRegexString';
 import { getClosestMatchingNode } from './getClosestMatchingNode';
 
-function getStartNodeFromHtmlString(htmlString: string) {
-  return createDomFromString(htmlString).getElementById('start');
-}
 const numericNodeRegex = new RegExp(/\d*\.?\d+\s*/, 'gi');
 const validNodeRegex = new RegExp(valueRegexString, 'gi');
 

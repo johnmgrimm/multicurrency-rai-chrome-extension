@@ -1,5 +1,3 @@
-const symbolRegexString = 'EUR|€|euros?';
-
 export function isNodeMatchingRegex(node: Node, regex: RegExp) {
   // required to avoid regex lastIndex issues
   regex.lastIndex = 0;
