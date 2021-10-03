@@ -1,6 +1,6 @@
 {
   "name": "multicurrency-rai-chrome-extension",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "This extension provides live conversion of the supported currencies to RAI stablecoin using latest exchange rates from CoinGecko. List of supported fiat currencies: EUR, CNY, JPY, GBP, KRW and INR. List of supported cryptocurrencies: DAI, USDC, sUSD, USDT, PAX, UST, BUSD, LUSD and FLOAT",
   "license": "MIT",
   "repository": {
