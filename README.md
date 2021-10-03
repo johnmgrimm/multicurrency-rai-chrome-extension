@@ -80,56 +80,9 @@ You may use NVM to run multiple Node versions https://github.com/nvm-sh/nvm
 ## Possible improvements
 
 1. Yen and Yuan symbol looks the same, prefer one over the other
-2. Consider multiple mixed matches support within one DOM node
-3. Use jest-chrome to add more tests to Chrome API based functions
-4. New detection flow:
-   - analyze node-by-node
-   - if node is empty => skip
-   - else if node has only non-symbol values => skip
-   - else if node has symbol value/s
-     - if it has symbol only => look around for a numeric value
-       (there could be an option if you should look PREV first or NEXT first)
-       - if PREV node has only number
-         - if PREV-PREV has coma or dot
-           - get it and look for number in the prev element => convert
-         - else => convert => exit
-       - else if PREV node is empty => skip
-       - else if PREV node has only non-number => break PREV analysis
-       - else if PREV node has numbers and symbols
-         - analyze content starting from the end
-           - if at the end there are non-number values => break PREV analysis
-           - numeric values at the end => get numeric part => convert
-       - else if NEXT node has only number
-         - if NEXT-NEXT has coma or dot
-           - get it and look for number in the next element => convert
-         - else => convert => exit
-       - else if NEXT node is empty => skip
-       - else if NEXT node has only non-number => break PREV analysis
-       - else if NEXT node has numbers and symbols
-         - analyze content starting from the beginning
-       - continue with PREV children or parent-PREV
-       - continue with NEXT children or parent-NEXT
-       - go as deep as necessary (children first then silbings)
-       - if this is the last node => exit
-     - else if it has symbol-number or number-symbol only => convert
-     - else (mixed values with symbol as well as random text)
-       - convert every regex matching price
-       - divide further on every non price element => groups are created
-       - convert every group that is surrounded by non-value groups
-       - analyze first group
-         - if not pricelike => skip
-         - else if pricelike
-           - if compelete price symbol+number => convert
-           - if number+symbol => look for possible remaining number parts in PREV nodes e.g. dot or coma
-           - if only number => look for remaining number parts and symbol in PREV nodes
-           - if only symbol => look for number in PREV nodes
-       - analyze last group
-         - if not pricelike => skip
-         - else if pricelike
-           - if compelete price number+symbol => convert
-           - if symbol+number => look for possible remaining number parts in NEXT nodes e.g. dot or coma
-           - if only number => look for remaining number parts and symbol in NEXT nodes
-           - if only symbol => look for number in NEXT nodes
+2. Use jest-chrome to add more tests to Chrome API based functions
+3. Support partial matches together with onther text in one node e.g. `10<a>$ something $10 else</a>`
+4. Handle degradated prices e.g. `<i>$.10</i>` or `.10<i>$</i>`
 
 ## Final notes
 
