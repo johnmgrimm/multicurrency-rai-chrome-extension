@@ -10,7 +10,7 @@ Each currency conversion can be turned on or off.
 Exchange rates are automatically updated when user interacts with browser.
 A minimal update interval is 10 minutes.
 
-Before extension reaches Chrome Web Store you can use it by downloading ZIP from https://github.com/johnmgrimm/multicurrency-rai-chrome-extension/releases/download/v1.0.1/multicurrency-rai-chrome-extension.zip and then using `chrome://extensions/`, `Developer mode` and `Load unpacked` button point to the directory where you unpack extension files.
+Before extension reaches Chrome Web Store you can use it by downloading ZIP from https://github.com/johnmgrimm/multicurrency-rai-chrome-extension/releases/download/v1.0.2/multicurrency-rai-chrome-extension.zip and then using `chrome://extensions/`, `Developer mode` and `Load unpacked` button point to the directory where you unpack extension files.
 
 ## Code coverage
 
