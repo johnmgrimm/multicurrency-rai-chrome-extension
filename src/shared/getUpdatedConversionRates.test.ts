@@ -17,10 +17,6 @@ afterAll(() => {
 describe('getUpdatedConversionRates', () => {
   test('happy path', async () => {
     (getStoredData as jest.Mock).mockResolvedValue({
-      currencies: [
-        { id: 'usd', symbol: 'USD' },
-        { id: 'dai', symbol: 'DAI' },
-      ],
       conversionRates: {
         usd: 1,
         dai: 1.01,
@@ -35,10 +31,6 @@ describe('getUpdatedConversionRates', () => {
 
     await getUpdatedConversionRates();
     expect(setStoredData).toBeCalledWith({
-      currencies: [
-        { id: 'usd', symbol: 'USD' },
-        { id: 'dai', symbol: 'DAI' },
-      ],
       conversionRates: {
         usd: 1.23,
         dai: 4.56,

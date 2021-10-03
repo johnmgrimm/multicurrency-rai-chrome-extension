@@ -7,111 +7,110 @@ export type CurrencyData = {
 
 export const autoUpdateInterval = 10 * 60 * 1000; // 10 min in ms
 
-export const allCurrencies: { [key: string]: CurrencyData } = {
-  usd: {
+export const allCurrencies: CurrencyData[] = [
+  {
     id: 'usd',
     symbol: 'USD',
-    regexp:
-      '(?<![A-Za-z])(us\\sdollars?|dollars?|USD|U.S.D.|US\\s?\\$|U.S.\\s?\\$|\\$)(?![A-Za-z])',
+    regexp: 'us\\sdollars?|dollars?|USD|U.S.D.|US\\s?\\$|U.S.\\s?\\$|\\$',
     type: 'fiat',
   },
-  eur: {
+  {
     id: 'eur',
     symbol: 'EUR',
-    regexp: '(?<![A-Za-z])(EUR|€|euros?)(?![A-Za-z])',
+    regexp: 'EUR|€|euros?',
     type: 'fiat',
   },
-  gbp: {
+  {
     id: 'gbp',
     symbol: 'GBP',
-    regexp: '(?<![A-Za-z])(GBP|£|pounds?|quids?)(?![A-Za-z])',
+    regexp: 'GBP|£|pounds?|quids?',
     type: 'fiat',
   },
-  jpy: {
+  {
     id: 'jpy',
     symbol: 'JPY',
-    regexp: '(?<![A-Za-z])(JPY|JP¥|¥|yens?)(?![A-Za-z])',
+    regexp: 'JPY|JP¥|¥|yens?',
     type: 'fiat',
   },
-  cny: {
+  {
     id: 'cny',
     symbol: 'CNY',
-    regexp: '(?<![A-Za-z])(CNY|CN¥|元|¥|yuans?|yuáns?)(?![A-Za-z])',
+    regexp: 'CNY|CN¥|元|¥|yuans?|yuáns?',
     type: 'fiat',
   },
-  krw: {
+  {
     id: 'krw',
     symbol: 'KRW',
-    regexp: '(?<![A-Za-z])(KRW|₩|wons?)(?![A-Za-z])',
+    regexp: 'KRW|₩|wons?',
     type: 'fiat',
   },
-  inr: {
+  {
     id: 'inr',
     symbol: 'INR',
-    regexp: '(?<![A-Za-z])(INR|₹|rs|rupees?)(?![A-Za-z])',
+    regexp: 'INR|₹|rs|rupees?',
     type: 'fiat',
   },
-  dai: {
+  {
     id: 'dai',
     symbol: 'DAI',
-    regexp: '(?<![A-Za-z])(dais?)(?![A-Za-z])',
+    regexp: 'dais?',
     type: 'crypto',
   },
-  terrausd: {
+  {
     id: 'terrausd',
     symbol: 'UST',
-    regexp: '(?<![A-Za-z])(usts?)(?![A-Za-z])',
+    regexp: 'usts?',
     type: 'crypto',
   },
-  'binance-usd': {
+  {
     id: 'binance-usd',
     symbol: 'BUSD',
-    regexp: '(?<![A-Za-z])(busds?)(?![A-Za-z])',
+    regexp: 'busds?',
     type: 'crypto',
   },
-  'usd-coin': {
+  {
     id: 'usd-coin',
     symbol: 'USDC',
-    regexp: '(?<![A-Za-z])(usdcs?)(?![A-Za-z])',
+    regexp: 'usdcs?',
     type: 'crypto',
   },
-  nusd: {
+  {
     id: 'nusd',
     symbol: 'sUSD',
-    regexp: '(?<![A-Za-z])(susds?)(?![A-Za-z])',
+    regexp: 'susds?',
     type: 'crypto',
   },
-  // usdp: {
+  // {
   //   id: 'paxos-standard',
   //   symbol: 'USDP',
-  //   regexp: '(?<![A-Za-z])(usdps?)(?![A-Za-z])',
+  //   regexp: 'usdps?',
   //   type: 'crypto',
   // },
-  payperex: {
+  {
     id: 'payperex',
     symbol: 'PAX',
-    regexp: '(?<![A-Za-z])(paxs?)(?![A-Za-z])',
+    regexp: 'paxs?',
     type: 'crypto',
   },
-  // 'pax-gold': {
+  // {
   //   id: 'pax-gold',
   //   symbol: 'PAXG',
-  //   regexp: '(?<![A-Za-z])(paxgs?)(?![A-Za-z])',
+  //   regexp: 'paxgs?',
   //   type: 'crypto',
   // },
-  'float-protocol-float': {
+  {
     id: 'float-protocol-float',
     symbol: 'FLOAT',
-    regexp: '(?<![A-Za-z])(floats?)(?![A-Za-z])',
+    regexp: 'floats?',
     type: 'crypto',
   },
-  'liquity-usd': {
+  {
     id: 'liquity-usd',
     symbol: 'LUSD',
-    regexp: '(?<![A-Za-z])(lusds?)(?![A-Za-z])',
+    regexp: 'lusds?',
     type: 'crypto',
   },
-};
+];
 
 export type ConversionRates = { [key: string]: number };
 

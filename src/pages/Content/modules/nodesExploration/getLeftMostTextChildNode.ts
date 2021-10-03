@@ -1,4 +1,4 @@
-export function getLeftMostTextChildNode(node: Node | null): Node | null {
+export function getLeftMostTextChildNode(node: Node | null): ChildNode | null {
   const children = node?.childNodes;
   if (!children) return null;
 

@@ -24,15 +24,21 @@ export const getRaiConversionRates = async (): Promise<{
 
 export function convertToRaiConversionRates(apiResponse: any) {
   return {
-    ...apiResponse.rai,
-    'usd-coin': apiResponse['usd-coin'].usd * apiResponse.rai.usd,
-    'binance-usd': apiResponse['binance-usd'].usd * apiResponse.rai.usd,
-    nusd: apiResponse.nusd.usd * apiResponse.rai.usd,
-    terrausd: apiResponse.terrausd.usd * apiResponse.rai.usd,
-    dai: apiResponse.dai.usd * apiResponse.rai.usd,
-    payperex: apiResponse.payperex.usd * apiResponse.rai.usd,
+    usd: 1 / apiResponse.rai.usd,
+    eur: 1 / apiResponse.rai.eur,
+    gbp: 1 / apiResponse.rai.gbp,
+    jpy: 1 / apiResponse.rai.jpy,
+    cny: 1 / apiResponse.rai.cny,
+    krw: 1 / apiResponse.rai.krw,
+    inr: 1 / apiResponse.rai.inr,
+    'usd-coin': 1 / (apiResponse['usd-coin'].usd * apiResponse.rai.usd),
+    'binance-usd': 1 / (apiResponse['binance-usd'].usd * apiResponse.rai.usd),
+    nusd: 1 / (apiResponse.nusd.usd * apiResponse.rai.usd),
+    terrausd: 1 / (apiResponse.terrausd.usd * apiResponse.rai.usd),
+    dai: 1 / (apiResponse.dai.usd * apiResponse.rai.usd),
+    payperex: 1 / (apiResponse.payperex.usd * apiResponse.rai.usd),
     'float-protocol-float':
-      apiResponse['float-protocol-float'].usd * apiResponse.rai.usd,
-    'liquity-usd': apiResponse['liquity-usd'].usd * apiResponse.rai.usd,
+      1 / (apiResponse['float-protocol-float'].usd * apiResponse.rai.usd),
+    'liquity-usd': 1 / (apiResponse['liquity-usd'].usd * apiResponse.rai.usd),
   };
 }
